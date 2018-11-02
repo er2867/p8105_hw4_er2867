@@ -41,7 +41,7 @@ rest_inspection %>%
           text = ~text_label)
 ```
 
-Column {data-width=450}
+Column {data-width=50}
 -----------------------------------------------------------------------
 
 ### Boxplot
