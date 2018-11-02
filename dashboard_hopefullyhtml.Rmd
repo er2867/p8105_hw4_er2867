@@ -1,0 +1,61 @@
+---
+title: "Untitled"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(p8105.datasets)
+library(viridis)
+library(plotly)
+
+data("rest_inspec")
+
+set.seed(111)
+rest_inspection = 
+  rest_inspec %>% 
+  select(boro, inspection_type, score, violation_code, zipcode, grade, inspection_date, violation_description) %>% 
+  filter(!is.na(score)) %>% 
+  sample_n(2000)
+
+```
+
+Column {data-width=550}
+-----------------------------------------------------------------------
+
+### Scatterplot
+
+```{r, echo=FALSE}
+rest_inspection %>%
+  mutate(text_label = str_c("Grade", grade, "Violation", violation_description)) %>% 
+  plot_ly(x = ~inspection_date, y = ~score, type = "scatter", mode = "markers",
+          alpha = 0.5, 
+          color = ~boro,
+          text = ~text_label)
+```
+
+Column {data-width=450}
+-----------------------------------------------------------------------
+
+### Boxplot
+
+```{r, echo=FALSE}
+rest_inspection %>% 
+  plot_ly(y = ~score, color = ~boro, type = "box",
+          colors = "Set3")
+```
+
+### Bar Plot
+
+```{r, echo=FALSE}
+rest_inspection %>% 
+  plot_ly(x = ~boro, y = ~score, color = ~grade, type = "bar")
+```
+
